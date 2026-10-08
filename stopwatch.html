@@ -15,17 +15,24 @@
         var curTime = time.getTime();
         var timer;
         var timerStarted = false;
-        document.getElementById("time").innerHTML = `${curTime}`
+        var startTime;
+        document.getElementById("time").innerHTML = `00:00:00`
         function startStopwatch() {
             if (timerStarted) {
                 clearInterval(timer);
                 timerStarted = false;
             
             } else {
+                startTimeBase = new Date();
+                var startTime = startTimeBase.getTime();
                 timer = setInterval(function() {
                     time = new Date();
                     curTime = time.getTime();
-                    document.getElementById("time").innerHTML = `${curTime}`
+                    totalTime = curTime - startTime;
+                    var minutes = Math.floor(totalTime / 60000).toString().padStart(2, '0');
+                    var seconds = Math.floor((totalTime % 60000) / 1000).toString().padStart(2, '0');
+                    var milliseconds = (totalTime % 1000).toString().padStart(2, '0');
+                    document.getElementById("time").innerHTML = `${minutes}:${seconds}:${milliseconds}`
                 },10);
                 timerStarted = true;
             }
