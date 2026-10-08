@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stopwatch</title>
+    
+</head>
+
+<body>
+    <h1>Stopwatch</h1>
+    <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
+    <span id="time">0</span>
+    <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
+    <script> 
+        var time = new Date();
+        var curTime = time.getTime();
+        var timer;
+        var timerStarted = false;
+        document.getElementById("time").innerHTML = `${curTime}`
+        function startStopwatch() {
+            if (timerStarted) {
+                clearInterval(timer);
+                timerStarted = false;
+            
+            } else {
+                timer = setInterval(function() {
+                    time = new Date();
+                    curTime = time.getTime();
+                    document.getElementById("time").innerHTML = `${curTime}`
+                },10);
+                timerStarted = true;
+            }
+            
+
+        }
+    </script>
+</body>
+
+</html>

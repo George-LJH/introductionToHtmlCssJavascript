@@ -3,11 +3,32 @@
 <head>
     <title>Introduction to Html, Css, and Javascript</title>
     <link rel="stylesheet" href = "style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.3/dist/easytimer.min.js"></script>
 </head>
 
 <body>
-    <h1>Hello, World! This is a h1 Title!</h1>
-    <p>Hello, World!</p>
+    <h1>Calculator</h1>
+    <p>This is a calculator! You can use this to </p>
+    <input type="number" id="firstNum" placeholder="Type something..."><br>
+    <input type="number" id="secondNum" placeholder="Type something..."><br>
+    <span id="answer">(Place Holder)</span>
+    <button onclick="showAlert()">Alert</button>
+    <button onclick="showAnswer()">Show answer</button>
+    <script> 
+        function showAlert() {
+            const alertBox = document.createElement('div');
+            alertBox.className = 'alert';
+            alertBox.textContent = 'This is a custom alert box.';
+            document.body.appendChild(alertBox);
+        }
+        function showAnswer() {
+            var firstNumber = Number(document.getElementById("firstNum").value);
+            var secondNumber = Number(document.getElementById("secondNum").value);
+            var answer = firstNumber + secondNumber;
+            document.getElementById("answer").innerHTML = ` ${firstNumber} + ${secondNumber} = ${answer}` ;
+            
+        }
+    </script>
 </body>
 
 </html>
