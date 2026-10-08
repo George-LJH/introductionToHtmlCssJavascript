@@ -3,6 +3,7 @@
 <head>
     <title>Stopwatch</title>
     <link rel="stylesheet" href = "stopwatchStyle.css"/>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -10,23 +11,25 @@
     <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
     <span id="time" class="timer">0</span>
     <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
-    <table id="myTable" border="1">
-    <thead>
-        <tr>
-        <th>#</th>
-        <th>Item Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        
-    </tbody>
-    </table>
+    <div id="wrapper"></div>
+
+    <!-- Include Grid.js JavaScript -->
+    <script src="https://unpkg.com/gridjs/dist/gridjs.production.min.js"></script>
+    
+    <!-- Initialize your grid -->
+    <script>
+      new gridjs.Grid({
+        columns: ["", "Time"],
+        data: [
+          ["1", "insert time"],
+          ["2", "insert time"]
+        ]
+      }).render(document.getElementById("wrapper"));
+    </script>
     <script> 
         var timeList = JSON.parse(localStorage.getItem("times")) || [];
         for (var i = 0; i < timeList.length; i++) {
-            addRowToTable(timeList[i]);
         }
-        reverseTableRows("myTable");
         console.log(timeList);
         window.addEventListener("keyup", function(event) {
             if (event.key == " ") {
@@ -49,8 +52,6 @@
                 console.log(formattedTime);
                 timeList.push(formattedTime);
                 localStorage.setItem("times", JSON.stringify(timeList));
-                addRowToTable(formattedTime);
-                reverseTableRows("myTable");
             } else {
                 startTimeBase = new Date();
                 var startTime = startTimeBase.getTime();
@@ -68,27 +69,38 @@
                 timeDisp.style.color = "green"; 
             }
             
-
         }
 
-        function addRowToTable(time) {
-            const tableBody = document.getElementById("myTable").getElementsByTagName("tbody")[0];
-            const newRow = tableBody.insertRow();
-            const cell1 = newRow.insertCell(0);
-            const cell2 = newRow.insertCell(1);
-            cell1.textContent = tableBody.rows.length; // Row number
-            cell2.textContent = time; // Time value
+        function loadTimeListGrid(elementId, columns) {
+            // 1. Retrieve the stringified data from local storage
+            const stringifiedData = localStorage.getItem("timeList");
+
+            if (!stringifiedData) {
+                console.warn("No 'timeList' data found in local storage.");
+                return;
+            }
+
+            try {
+                // 2. Parse the string back into a JavaScript array/object
+                const parsedData = JSON.parse(stringifiedData);
+
+                // 3. Initialize and render the Grid.js instance
+                new Grid({
+                columns: ["times"],
+                data: parsedData,
+                pagination: {
+                    limit: 10
+                },
+                sort: true,
+                search: true
+                }).render(document.getElementById(elementId));
+
+            } catch (error) {
+                console.error("Failed to parse or render timeList grid:", error);
+            }
         }
-        function reverseTableRows(tableId) {
-            // 1. Get the tbody element
-            const tbody = document.querySelector(`#${tableId} tbody`);
-            
-            // 2. Convert rows into a true Array and reverse it
-            const rows = Array.from(tbody.rows).reverse();
-            
-            // 3. Append them back into the tbody
-            rows.forEach(row => tbody.appendChild(row));
-        }
+        
+        
     </script>
 </body>
 
