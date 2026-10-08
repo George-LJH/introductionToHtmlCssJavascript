@@ -2,26 +2,33 @@
 <html>
 <head>
     <title>Stopwatch</title>
-    
+    <link rel="stylesheet" href = "stopwatchStyle.css"/>
 </head>
 
 <body>
     <h1>Stopwatch</h1>
     <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
-    <span id="time">0</span>
+    <span id="time" class="timer">0</span>
     <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
     <script> 
+        window.addEventListener("keyup", function(event) {
+            if (event.key == " ") {
+                startStopwatch();
+            }
+        });
         var time = new Date();
         var curTime = time.getTime();
         var timer;
         var timerStarted = false;
         var startTime;
+        const timeDisp = document.getElementById("time");
+
         document.getElementById("time").innerHTML = `00:00:00`
         function startStopwatch() {
             if (timerStarted) {
                 clearInterval(timer);
                 timerStarted = false;
-            
+                timeDisp.style.color = "red"; 
             } else {
                 startTimeBase = new Date();
                 var startTime = startTimeBase.getTime();
@@ -35,6 +42,7 @@
                     document.getElementById("time").innerHTML = `${minutes}:${seconds}:${milliseconds}`
                 },10);
                 timerStarted = true;
+                timeDisp.style.color = "green"; 
             }
             
 
