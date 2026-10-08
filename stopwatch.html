@@ -10,7 +10,20 @@
     <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
     <span id="time" class="timer">0</span>
     <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
+    <table id="myTable" border="1">
+    <thead>
+        <tr>
+        <th>#</th>
+        <th>Item Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+    </table>
     <script> 
+        var timeList = JSON.parse(localStorage.getItem("times")) || [];
+        console.log(timeList);
         window.addEventListener("keyup", function(event) {
             if (event.key == " ") {
                 startStopwatch();
@@ -29,6 +42,9 @@
                 clearInterval(timer);
                 timerStarted = false;
                 timeDisp.style.color = "red"; 
+                console.log(formattedTime);
+                timeList.push(formattedTime);
+                localStorage.setItem("times", JSON.stringify(timeList));
             } else {
                 startTimeBase = new Date();
                 var startTime = startTimeBase.getTime();
@@ -38,14 +54,24 @@
                     totalTime = curTime - startTime;
                     var minutes = Math.floor(totalTime / 60000).toString().padStart(2, '0');
                     var seconds = Math.floor((totalTime % 60000) / 1000).toString().padStart(2, '0');
-                    var milliseconds = (totalTime % 1000).toString().padStart(2, '0');
-                    document.getElementById("time").innerHTML = `${minutes}:${seconds}:${milliseconds}`
+                    var milliseconds = (totalTime % 1000).toString().padStart(3, '0');
+                    formattedTime = `${minutes}:${seconds}:${milliseconds}`;
+                    document.getElementById("time").innerHTML = formattedTime;
                 },10);
                 timerStarted = true;
                 timeDisp.style.color = "green"; 
             }
             
 
+        }
+
+        function addRowToTable(time) {
+            const tableBody = document.getElementById("myTable").getElementsByTagName("tbody")[0];
+            const newRow = tableBody.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            cell1.textContent = tableBody.rows.length; // Row number
+            cell2.textContent = time; // Time value
         }
     </script>
 </body>
