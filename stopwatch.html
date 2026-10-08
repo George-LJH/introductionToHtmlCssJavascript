@@ -23,6 +23,10 @@
     </table>
     <script> 
         var timeList = JSON.parse(localStorage.getItem("times")) || [];
+        for (var i = 0; i < timeList.length; i++) {
+            addRowToTable(timeList[i]);
+        }
+        reverseTableRows("myTable");
         console.log(timeList);
         window.addEventListener("keyup", function(event) {
             if (event.key == " ") {
@@ -45,6 +49,8 @@
                 console.log(formattedTime);
                 timeList.push(formattedTime);
                 localStorage.setItem("times", JSON.stringify(timeList));
+                addRowToTable(formattedTime);
+                reverseTableRows("myTable");
             } else {
                 startTimeBase = new Date();
                 var startTime = startTimeBase.getTime();
@@ -72,6 +78,16 @@
             const cell2 = newRow.insertCell(1);
             cell1.textContent = tableBody.rows.length; // Row number
             cell2.textContent = time; // Time value
+        }
+        function reverseTableRows(tableId) {
+            // 1. Get the tbody element
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            
+            // 2. Convert rows into a true Array and reverse it
+            const rows = Array.from(tbody.rows).reverse();
+            
+            // 3. Append them back into the tbody
+            rows.forEach(row => tbody.appendChild(row));
         }
     </script>
 </body>
