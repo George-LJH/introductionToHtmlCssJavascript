@@ -1,6 +1,6 @@
 @font-face {
   font-family: "7segment";
-  src: url("fonts/7segment.woff2") format("woff2");
+  src: url("fonts/lcd2.woff") format("woff");
 }
 
 .timer {
@@ -17,3 +17,18 @@
     align-items: center;
     margin-top: 20px;
 }
+.table-wrapper {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: flex-end;
+  width: min(600px, 100vw);
+}
+
+#wrapper {
+  width: 100%; 
+  max-width: 600px; 
+}
+

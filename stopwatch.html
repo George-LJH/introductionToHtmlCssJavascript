@@ -11,26 +11,18 @@
     <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
     <span id="time" class="timer">0</span>
     <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
-    <div id="wrapper"></div>
+    <div class="table-wrapper">
+        <div id="wrapper"></div>
+    </div>
 
     <!-- Include Grid.js JavaScript -->
     <script src="https://unpkg.com/gridjs/dist/gridjs.production.min.js"></script>
     
-    <!-- Initialize your grid -->
-    <script>
-      new gridjs.Grid({
-        columns: ["", "Time"],
-        data: [
-          ["1", "insert time"],
-          ["2", "insert time"]
-        ]
-      }).render(document.getElementById("wrapper"));
-    </script>
     <script> 
         var timeList = JSON.parse(localStorage.getItem("times")) || [];
-        for (var i = 0; i < timeList.length; i++) {
-        }
-        console.log(timeList);
+
+        // alert(timeList);
+        loadTimeListGrid("wrapper");
         window.addEventListener("keyup", function(event) {
             if (event.key == " ") {
                 startStopwatch();
@@ -41,6 +33,7 @@
         var timer;
         var timerStarted = false;
         var startTime;
+        var formattedTime;
         const timeDisp = document.getElementById("time");
 
         document.getElementById("time").innerHTML = `00:00:00`
@@ -52,6 +45,7 @@
                 console.log(formattedTime);
                 timeList.push(formattedTime);
                 localStorage.setItem("times", JSON.stringify(timeList));
+                loadTimeListGrid("wrapper");
             } else {
                 startTimeBase = new Date();
                 var startTime = startTimeBase.getTime();
@@ -70,37 +64,35 @@
             }
             
         }
+        function loadTimeListGrid(wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            wrapper.innerHTML = ""; // Clear previous content
 
-        function loadTimeListGrid(elementId, columns) {
-            // 1. Retrieve the stringified data from local storage
-            const stringifiedData = localStorage.getItem("timeList");
-
-            if (!stringifiedData) {
-                console.warn("No 'timeList' data found in local storage.");
-                return;
-            }
-
-            try {
-                // 2. Parse the string back into a JavaScript array/object
-                const parsedData = JSON.parse(stringifiedData);
-
-                // 3. Initialize and render the Grid.js instance
-                new Grid({
-                columns: ["times"],
-                data: parsedData,
+            new gridjs.Grid({
+                columns: ["Time"],
+                data: timeList.map(time => [time]),
                 pagination: {
-                    limit: 10
+                    limit: 3,
+                    summary: true
                 },
-                sort: true,
-                search: true
-                }).render(document.getElementById(elementId));
+                style: {
+                    table: {
+                        'width': '100%',
+                        'border-collapse': 'collapse',
+                    },
+                    th: {
+                        'background-color': '#f2f2f2',
+                        'padding': '8px',
+                        'text-align': 'left',
+                    },
+                    td: {
+                        'padding': '8px',
+                        'border-bottom': '1px solid #ddd',
+                    },
+                }
+            }).render(wrapper);
 
-            } catch (error) {
-                console.error("Failed to parse or render timeList grid:", error);
-            }
         }
-        
-        
     </script>
 </body>
 
