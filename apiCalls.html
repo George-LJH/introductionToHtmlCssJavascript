@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+  <!-- <input type="text" id="message" placeholder="Enter your message here">
+  <input type="text" id="name" placeholder="Enter your name here">
+  <button id="sendMessage" onclick="sendMessage(document.getElementById('message').value, document.getElementById('name').value)">Send Message</button> -->
+  <ol id="messages" aria-live="polite"></ol>
+
+<form id="chatForm">
+  <input id="name" type="text" placeholder="Your name" required>
+  <input id="message" type="text" placeholder="Write a message..." required>
+  <input id="roomID" type="text" placeholder="Room ID." required>
+  <button type="submit">Send</button>
+</form>
+
+<p id="status" role="status"></p>
+	<script>
+    const eventSource = new EventSource(`https://ntfy.sh/W7pd8x7g0Mmg1bbR/sse`);
+    eventSource.onmessage = (e) => {
+        // alert(e.data);
+      alert(JSON.parse(e.data).title + ": " + JSON.parse(e.data).message);
+    };
+    function sendMessage(message, name) {
+
+    // document.getElementById("message").value
+    fetch('https://ntfy.sh/W7pd8x7g0Mmg1bbR', {
+    method: 'POST', // PUT works too
+    body: message,
+    headers: {
+        'Title': name,
+    }
+})
+    }
+    
+  </script>
+</body>
+</html>
