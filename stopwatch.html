@@ -4,27 +4,57 @@
     <title>Stopwatch</title>
     <link rel="stylesheet" href = "stopwatchStyle.css"/>
     <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
 </head>
 
 <body>
-    <h1>Stopwatch</h1>
-    <p>This is a website that shows the current epoch time, and it will eventually be converted to a stopwatch.</p>
+    <div class="topBar">
+        <button id="menuButton" type="button" aria-expanded="false" aria-controls="menu">
+            Menu
+        </button>
+        <h1>Stopwatch</h1>
+    </div>
+
+    <nav id="menu" hidden>
+        <button id="clearButton" type="button" onclick="clearTimes(event)">Clear times</button>
+    </nav>
+
     <span id="time" class="timer">0</span>
-    <button onclick="startStopwatch()">Start/Stop Stopwatch</button>
     <div class="table-wrapper">
         <div id="wrapper"></div>
     </div>
+    
 
-    <!-- Include Grid.js JavaScript -->
+    
+
     <script src="https://unpkg.com/gridjs/dist/gridjs.production.min.js"></script>
     
     <script> 
         var timeList = JSON.parse(localStorage.getItem("times")) || [];
-
+        var dateList = JSON.parse(localStorage.getItem("dates")) || [];
+        var timeGrid;
+        function preventSpaceButtonClick(event) {
+            if (event.key === " ") {
+                event.preventDefault();
+                event.currentTarget.blur();
+            }
+        }
+        function applySpaceClickPrevention(button) {
+            if (!button) return;
+            button.addEventListener("keydown", preventSpaceButtonClick);
+        }
+        function clearTimes(event) {
+            event.currentTarget.blur();
+            localStorage.removeItem("times");
+            localStorage.removeItem("dates");
+            timeList = [];
+            dateList = [];
+            loadTimeListGrid("wrapper");
+        }
         // alert(timeList);
         loadTimeListGrid("wrapper");
         window.addEventListener("keyup", function(event) {
-            if (event.key == " ") {
+            if (event.key == " " && !timerStarted) {
                 startStopwatch();
             }
         });
@@ -36,15 +66,21 @@
         var formattedTime;
         const timeDisp = document.getElementById("time");
 
-        document.getElementById("time").innerHTML = `00:00:00`
+        document.getElementById("time").innerHTML = `00:00:000`
+        timeDisp.style.color = "red";
         function startStopwatch() {
             if (timerStarted) {
                 clearInterval(timer);
                 timerStarted = false;
                 timeDisp.style.color = "red"; 
                 console.log(formattedTime);
+
+                const dateString = getTimeAndDateStyled();
                 timeList.push(formattedTime);
+                dateList.push(dateString);
+
                 localStorage.setItem("times", JSON.stringify(timeList));
+                localStorage.setItem("dates", JSON.stringify(dateList));
                 loadTimeListGrid("wrapper");
             } else {
                 startTimeBase = new Date();
@@ -66,16 +102,34 @@
         }
         function loadTimeListGrid(wrapperId) {
             const wrapper = document.getElementById(wrapperId);
-            wrapper.innerHTML = ""; // Clear previous content
+            const rows = timeList
+                .slice()
+                .reverse()
+                .map((timeValue, index) => {
+                    const dateValue = dateList[dateList.length - 1 - index] || "";
+                    return [dateValue, timeValue];
+                });
 
-            new gridjs.Grid({
-                columns: ["Time"],
-                data: timeList.map(time => [time]),
+            if (timeGrid) {
+                timeGrid.updateConfig({ data: rows }).forceRender();
+                return;
+            }
+
+            timeGrid = new gridjs.Grid({
+                sort: true,
+                search: true,
+                columns: ["Date", "Time"],
+                data: rows,
                 pagination: {
                     limit: 3,
                     summary: true
                 },
                 style: {
+                    container: {
+                        'background-color': '#878787',
+                        'border-radius': '12px',
+                        'alignment': 'center'
+                    },
                     table: {
                         'width': '100%',
                         'border-collapse': 'collapse',
@@ -90,8 +144,32 @@
                         'border-bottom': '1px solid #ddd',
                     },
                 }
-            }).render(wrapper);
+            });
+            timeGrid.render(wrapper);
 
+        }
+        const menuButton = document.getElementById("menuButton");
+        const menu = document.getElementById("menu");
+
+        applySpaceClickPrevention(menuButton);
+
+        function toggleMenu() {
+            const isHidden = menu.hidden;
+            menu.hidden = !isHidden;
+            menuButton.setAttribute("aria-expanded", String(!menu.hidden));
+        }
+
+        menuButton.addEventListener("click", toggleMenu);
+        function getTimeAndDateStyled() {
+            const now = new Date();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const year = now.getFullYear();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${month}/${day}/${year} ${hours}:${minutes} ${ampm}`;
         }
     </script>
 </body>

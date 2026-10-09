@@ -3,6 +3,94 @@
   src: url("fonts/lcd2.woff") format("woff");
 }
 
+:root {
+  --bg: #f3f5f0;
+  --panel: #ffffff;
+  --border: #d5ddd4;
+  --text: #202b27;
+  --muted: #64716a;
+  --accent: #176b50;
+  --accent-dark: #12382e;
+  --hover: #e8f1e9;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.topBar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60px;
+    width: 100%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+}
+
+.topBar h1 {
+    margin: 0;
+    text-align: center;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 400;
+}
+
+#menuButton {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+    font: inherit;
+}
+
+#menuButton:hover {
+    background: var(--hover);
+    color: var(--accent);
+}
+
+#menu {
+    position: absolute;
+    top: 62px;
+    left: 20px;
+    z-index: 15;
+    padding: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+#menu[hidden] {
+    display: none;
+}
+
+#menu button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 10px 12px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+#menu button:hover {
+    background: var(--hover);
+    color: var(--accent);
+}
+
 .timer {
     display: flex;
     justify-content: center;
@@ -11,24 +99,20 @@
     font-family: '7segment', sans-serif;
     font-size: 50px;
 }
+
 .timeTable {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
 }
+
 .table-wrapper {
-  position: fixed;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  display: flex;
-  justify-content: flex-end;
-  width: min(600px, 100vw);
+    width: min(600px, 90vw);
+    margin: 90px auto 0;
 }
 
 #wrapper {
-  width: 100%; 
-  max-width: 600px; 
+  width: 100%;
+  max-width: 600px;
 }
-
