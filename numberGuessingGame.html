@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script src="https://unpkg.com/panic-overlay"></script>
+    <script src="https://unpkg.com/ololog"></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+</head>
+<body>
+    
+    <input type="number" id="guessInput" placeholder="Enter your guess">
+    <button id="submitGuess" onclick="submitGuess()">Submit Guess</button>
+    <div id="feedback"></div>
+    <pre id="errorDetails" hidden style="white-space: pre-wrap; color: #000000;"></pre>
+    <script> 
+        document.getElementById("guessInput").oninput = function() {
+            alert(this.value);
+        }
+        function submitGuess() {
+            guess = document.getElementById("guessInput").valueAsNumber;
+            alert(guess);
+        }
+    </script>
+</body>
+</html>
