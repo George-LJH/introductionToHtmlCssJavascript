@@ -1,1 +1,9 @@
-I made this because I wanted to learn about web development, whether that can be frontend or backend. I choose to make these projects for a reason; the calculator since they are often my introduction to any coding language, the Number Guessing game since that was one of the first project I ever did on Python, the stopwatch because I like Rubik's cubing, and the API Call since I wanted to use Ntfy along with my microcontrollers to detect when the mailman was here.
+
+
+
+I started building these projects to learn web development and explore both frontend and backend. Each project was chosen for a specific reason:
+
+* Calculator: This is my first project when learning any new programming language.
+* Number Guessing Game: This was one of the very first things I ever coded when I started with Python.
+* Stopwatch: As a fan of Rubik's cubing, I wanted to build a timer.
+* API Call Integration: I wanted to connect Ntfy with my microcontrollers to send alerts to my device whenever the mailman arrives.
