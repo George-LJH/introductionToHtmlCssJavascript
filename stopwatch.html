@@ -51,10 +51,9 @@
             dateList = [];
             loadTimeListGrid("wrapper");
         }
-        // alert(timeList);
         loadTimeListGrid("wrapper");
-        window.addEventListener("keyup", function(event) {
-            if (event.key == " " && !timerStarted) {
+        window.addEventListener("keydown", function(event) {
+            if (event.key == " ") {
                 startStopwatch();
             }
         });
